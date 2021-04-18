@@ -17,7 +17,17 @@
 
 Делать нужно на React, при этом допускается использовать любые библиотеки.
 
-В качестве образца реализации можно взять этот скриншот:
 
+## Результаты
 
-![Screenshot](https://github.com/rafaele85/salon-schedule/blob/master/screens/screenshot1.PNG?raw=true)
+Расписание выполнено на React на Typescript c использованием MaterialUI
+и styled components.
+
+Для хранения данных использован Redux.
+
+Результаты работы представлены на скриншотах:
+
+![Основной интерфейс](https://github.com/rafaele85/salon-schedule/blob/master/screens/screenshot1.PNG?raw=true)
+
+![Результирующий JSON](https://github.com/rafaele85/salon-schedule/blob/master/screens/screenshot2.PNG?raw=true)
+
