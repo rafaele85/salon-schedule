@@ -1,8 +1,7 @@
 import {makeStyles, Theme, Typography} from "@material-ui/core";
 import {DaySwitch} from "./day-switch";
-import {IDay} from "../types/days";
-import {useEffect, useState} from "react";
-import {DayService} from "../service/day";
+import {useDispatch, useSelector} from "react-redux";
+import {selectDay, updateDay} from "../state/day-list";
 
 const useStyles = makeStyles((_theme: Theme) => {
     return {
@@ -28,19 +27,11 @@ export interface IDayHeaderProps {
 }
 
 export const DayHeader = (props: IDayHeaderProps) => {
-    const [day, setDay] = useState<IDay|undefined>();
 
-    useEffect(() => {
-        const d = DayService.instance().getDay(props.dayId);
-        setDay(d);
-    },[props.dayId])
-
+    const day = useSelector(selectDay(props.dayId));
+    const dispatch = useDispatch();
     const handleToggle = () => {
-        if(!day) {
-            console.error("Day is not set");
-            return;
-        }
-        DayService.instance().updateDay(day.id, !day.active);
+        updateDay(dispatch, day.id, !day.active);
     };
 
     const classes = useStyles();

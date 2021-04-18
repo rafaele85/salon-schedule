@@ -1,9 +1,8 @@
-import {useEffect, useState} from "react";
-import {DayService} from "../service/day";
-import {IEvent,  NotificationService} from "../service/notification";
 import {DaySchedule} from "./day-schedule";
 import {DayHeader} from "./day-header";
 import {makeStyles, Theme} from "@material-ui/core";
+import {useSelector} from "react-redux";
+import {selectIsDayActive} from "../state/day-list";
 
 const useStyles = makeStyles((_theme: Theme) => {
     return {
@@ -24,27 +23,8 @@ export interface IDayProps {
 }
 
 export const Day = (props: IDayProps) => {
-    const [isActive, setActive] = useState<boolean>(false);
 
-    useEffect(() => {
-        const refreshActive = () => {
-            const act = DayService.instance().isActive(props.dayId);
-            setActive(act||false);
-        };
-
-        const handleDayUpdate = (_event: IEvent, dayId: number) => {
-            if(dayId===props.dayId) {
-                refreshActive();
-            }
-        };
-
-        refreshActive();
-
-        NotificationService.instance().subscribe(IEvent.UPDATEDAY, handleDayUpdate);
-        return () => {
-            NotificationService.instance().unsubscribe(IEvent.UPDATEDAY, handleDayUpdate);
-        };
-    }, [props.dayId]);
+    const isActive = useSelector(selectIsDayActive(props.dayId));
 
     const classes = useStyles();
 

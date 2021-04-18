@@ -1,10 +1,9 @@
 import {Button, makeStyles, Theme} from "@material-ui/core";
-import {useEffect, useState} from "react";
-import {IDay} from "../types/days";
-import {DayService} from "../service/day";
+import {useState} from "react";
 import {Day} from "./day";
 import {SaveResult} from "./save-result";
-import {ScheduleService} from "../service/schedule";
+import {useSelector} from "react-redux";
+import {selectDayList} from "../state/day-list";
 
 const styles = {
     container: {
@@ -23,21 +22,16 @@ const useStyles = makeStyles( (_theme: Theme) => styles);
 
 export const SalonSchedule = () => {
 
-    const [days, setDays] = useState<IDay[]>([]);
-    const [result, setResult] = useState<string>("");
+    const [showResult, setShowResult] = useState<boolean>(false);
 
-    useEffect(() => {
-        const ds = DayService.instance().listDays();
-        setDays(ds);
-    }, []);
+    const days = useSelector(selectDayList);
 
     const handleSave = () => {
-        const res = ScheduleService.instance().save();
-        setResult(JSON.stringify(res, null, 2));
+        setShowResult(true);
     };
 
     const handleCloseResult = () => {
-        setResult("");
+        setShowResult(false);
     };
 
     const classes = useStyles();
@@ -53,9 +47,9 @@ export const SalonSchedule = () => {
     }
 
     let jsx;
-    if(result) {
+    if(showResult) {
         jsx = (
-            <SaveResult text={result} onClose={handleCloseResult}/>
+            <SaveResult onClose={handleCloseResult}/>
         );
     } else {
         jsx = (

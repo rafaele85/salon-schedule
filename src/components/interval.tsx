@@ -2,10 +2,14 @@ import {IconButton, makeStyles, Theme} from "@material-ui/core";
 import {ITime} from "../types/interval";
 import ClearIcon from "@material-ui/icons/Clear";
 import PlusIcon from "@material-ui/icons/Add";
-import {useEffect, useState} from "react";
-import {IntervalService} from "../service/interval";
 import {TimeSelector} from "./time-selector";
-import {IEvent, NotificationService} from "../service/notification";
+import {
+    selectIntervalFrom,
+    selectIntervalTo,
+    updateIntervalFrom,
+    updateIntervalTo
+} from "../state/interval-list";
+import {useDispatch, useSelector} from "react-redux";
 
 const useStyles = makeStyles((_theme: Theme) => {
     return {
@@ -41,36 +45,18 @@ export interface IIntervalProps {
 }
 
 export const Interval = (props: IIntervalProps) => {
+    const from = useSelector(selectIntervalFrom(props.intervalId));
+    const to = useSelector(selectIntervalTo(props.intervalId));
 
-    const [from, setFrom] = useState<string>("");
-    const [to, setTo] = useState<string>("");
-
-    const refreshInterval = () => {
-        const nt = IntervalService.instance().getInterval(props.intervalId);
-        if(!nt) {
-            console.error("not found interval for intervalId", props.intervalId);
-            return;
-        }
-        setFrom(nt.from||"");
-        setTo(nt.to||"");
+    const fromDispatch = useDispatch();
+    const handleChangeFrom = (f: ITime) => {
+        updateIntervalFrom(fromDispatch, props.intervalId, f);
     };
 
-    useEffect(() => {
-
-        const handleUpdateInterval = (_event: IEvent, intervalId: number) => {
-            if(intervalId===props.intervalId) {
-                refreshInterval();
-            }
-        };
-
-        refreshInterval();
-
-        NotificationService.instance().subscribe(IEvent.UPDATEINTERVAL, handleUpdateInterval);
-
-        return () => {
-            NotificationService.instance().unsubscribe(IEvent.UPDATEINTERVAL, handleUpdateInterval);
-        }
-    },[props.intervalId]);
+    const toDispatch = useDispatch();
+    const handleChangeTo = (t: ITime) => {
+        updateIntervalTo(toDispatch, props.intervalId, t);
+    };
 
     const classes = useStyles();
 
@@ -89,13 +75,7 @@ export const Interval = (props: IIntervalProps) => {
         )
     }
 
-    const handleChangeFrom = (f: ITime) => {
-      IntervalService.instance().updateIntervalFrom(props.intervalId, f);
-    };
 
-    const handleChangeTo = (t: ITime) => {
-        IntervalService.instance().updateIntervalTo(props.intervalId, t);
-    };
     return (
         <div className={classes.container}>
             С <TimeSelector value={from} onChange={handleChangeFrom}/>

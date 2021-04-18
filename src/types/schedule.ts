@@ -9,12 +9,5 @@ export type IEntitySchedule = {
     times: ITimeEntries;
 };
 
-/*
-export function defaultEntityTimes(): ITimeEntries {
-    return [
-        {id: uuid(), from: "", to: ""}
-    ]
-}
-*/
 export type ISchedule = IEntitySchedule[][];
 

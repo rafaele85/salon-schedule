@@ -1,9 +1,9 @@
-import {IDayEntity} from "../types/schedule";
 import {makeStyles, Theme} from "@material-ui/core";
 import {DayHeader} from "./day-header";
 import {Entity} from "./entity";
-import React, {useEffect, useState} from "react";
-import {EntityService} from "../service/entity";
+import React, {} from "react";
+import {useSelector} from "react-redux";
+import {selectDayEntityList} from "../state/entity-list";
 
 const useStyles = makeStyles((_theme: Theme) => {
     return {
@@ -26,14 +26,9 @@ export interface IDayScheduleProps {
 }
 
 export const DaySchedule = (props: IDayScheduleProps) => {
-    const [dayEntities, setDayEntities] = useState<IDayEntity[]>([]);
 
-    console.log("DaySchedule render")
 
-    useEffect(() => {
-        const es = EntityService.instance().listDayEntities(props.dayId);
-        setDayEntities(es);
-    }, [props.dayId]);
+    const dayEntities = useSelector(selectDayEntityList(props.dayId));
 
     const classes = useStyles();
 
