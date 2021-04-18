@@ -31,3 +31,11 @@
 
 ![Результирующий JSON](https://github.com/rafaele85/salon-schedule/blob/master/screens/screenshot2.PNG?raw=true)
 
+
+Также разработана версия (salon-schedule-v2) на базе компонента react schedule, которая позволяет выделять время при
+помощи мыши.
+
+![V2](https://github.com/rafaele85/salon-schedule/blob/master/screens/screenshot3.PNG?raw=true)
+
+
+
